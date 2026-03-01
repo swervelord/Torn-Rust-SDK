@@ -10,6 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
       - uses: Swatinem/rust-cache@v2
       - name: Format
         run: cargo fmt --check
@@ -29,6 +31,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ matrix.toolchain }}
+          components: clippy
       - uses: Swatinem/rust-cache@v2
       - name: Clippy
         run: cargo clippy --all-targets --all-features -- -D warnings
