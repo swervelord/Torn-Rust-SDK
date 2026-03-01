@@ -3,6 +3,7 @@ use thiserror::Error;
 use crate::client::ClientError;
 
 #[derive(Debug, Error)]
+#[non_exhaustive]
 /// Error type returned by high-level wrapper APIs.
 pub enum SdkError {
     /// Wrapped low-level client failure.

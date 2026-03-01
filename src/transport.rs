@@ -169,7 +169,7 @@ fn build_url(
     Ok(url)
 }
 
-fn redacted_secret(secret: &str) -> String {
+pub(crate) fn redacted_secret(secret: &str) -> String {
     if secret.is_empty() {
         return "<empty>".to_string();
     }

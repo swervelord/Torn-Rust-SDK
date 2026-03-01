@@ -7,6 +7,7 @@ use crate::client::DataRequestOptions;
 use crate::executor::ExecutionOptions;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[non_exhaustive]
 /// Sort direction for endpoints supporting `sort`.
 pub enum SortOrder {
     /// Ascending.

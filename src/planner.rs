@@ -5,7 +5,7 @@ use std::path::Path;
 
 use crate::capabilities::{CapabilitiesDocument, ResourceCapabilities, SelectionCapability};
 use crate::error::PlannerError;
-use crate::v1_catalog::V1Catalog;
+use crate::v1_catalog::{V1Catalog, is_allowed_v1_filter};
 
 #[derive(Debug, Clone)]
 /// Plans resource/selection requests into concrete HTTP calls.
@@ -404,6 +404,7 @@ pub struct RequestPlan {
 }
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[non_exhaustive]
 /// Supported HTTP methods for planned requests.
 pub enum HttpMethod {
     /// HTTP GET.
@@ -411,6 +412,7 @@ pub enum HttpMethod {
 }
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[non_exhaustive]
 /// API version target selected by the planner/executor.
 pub enum ApiVersion {
     /// Torn API v1.
@@ -420,6 +422,7 @@ pub enum ApiVersion {
 }
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[non_exhaustive]
 /// Strategy used to produce a planned request.
 pub enum RequestStrategy {
     /// Multiple selections batched on a generic endpoint.
@@ -626,23 +629,6 @@ fn normalize_and_dedup_selections(selections: &[String]) -> Vec<String> {
         }
     }
     out
-}
-
-const V1_ALLOWED_FILTERS: &[&str] = &[
-    "cat",
-    "filters",
-    "from",
-    "limit",
-    "offset",
-    "sort",
-    "stat",
-    "striptags",
-    "timestamp",
-    "to",
-];
-
-fn is_allowed_v1_filter(name: &str) -> bool {
-    V1_ALLOWED_FILTERS.contains(&name)
 }
 
 #[cfg(test)]

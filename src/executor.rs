@@ -21,9 +21,9 @@ use crate::planner::{
 use crate::rate_limit::{AcquireResult, RateLimitConfig, RateLimiter};
 use crate::transport::{
     HttpTransport, ReqwestTransport, TransportError, TransportMethod, TransportRequest,
-    TransportResponse,
+    TransportResponse, redacted_secret,
 };
-use crate::v1_catalog::V1Catalog;
+use crate::v1_catalog::{V1Catalog, is_allowed_v1_filter};
 
 #[derive(Debug, Clone)]
 /// Runtime configuration for request execution behavior.
@@ -52,7 +52,7 @@ impl Default for ExecutorConfig {
             base_url_v2: "https://api.torn.com/v2".to_string(),
             base_url_v1: "https://api.torn.com".to_string(),
             timeout: Duration::from_secs(30),
-            user_agent: "torn-sdk-rust/0.1".to_string(),
+            user_agent: format!("torn-sdk-rust/{}", env!("CARGO_PKG_VERSION")),
             max_attempts: 3,
             network_retry_backoff: Duration::from_millis(250),
             rate_limits: RateLimitConfig::default(),
@@ -692,37 +692,6 @@ fn current_unix_seconds() -> u64 {
         .duration_since(UNIX_EPOCH)
         .expect("system clock should be after UNIX_EPOCH")
         .as_secs()
-}
-
-const V1_ALLOWED_FILTERS: &[&str] = &[
-    "cat",
-    "filters",
-    "from",
-    "limit",
-    "offset",
-    "sort",
-    "stat",
-    "striptags",
-    "timestamp",
-    "to",
-];
-
-fn is_allowed_v1_filter(name: &str) -> bool {
-    V1_ALLOWED_FILTERS.contains(&name)
-}
-
-fn redacted_secret(secret: &str) -> String {
-    if secret.is_empty() {
-        return "<empty>".to_string();
-    }
-
-    if secret.len() <= 6 {
-        return "***".to_string();
-    }
-
-    let prefix = &secret[..3];
-    let suffix = &secret[secret.len() - 2..];
-    format!("{prefix}***{suffix}")
 }
 
 #[cfg(test)]

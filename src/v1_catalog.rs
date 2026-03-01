@@ -53,6 +53,23 @@ impl V1Catalog {
     }
 }
 
+pub(crate) const V1_ALLOWED_FILTERS: &[&str] = &[
+    "cat",
+    "filters",
+    "from",
+    "limit",
+    "offset",
+    "sort",
+    "stat",
+    "striptags",
+    "timestamp",
+    "to",
+];
+
+pub(crate) fn is_allowed_v1_filter(name: &str) -> bool {
+    V1_ALLOWED_FILTERS.contains(&name)
+}
+
 const USER_SELECTIONS: &[&str] = &[
     "ammo",
     "attacks",

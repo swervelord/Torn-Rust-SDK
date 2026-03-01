@@ -1,54 +1,15 @@
-use std::collections::VecDeque;
+#[allow(dead_code)]
+mod support;
+
 use std::path::PathBuf;
-use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
+use support::MockTransport;
 use torn_sdk_planner::{
-    BaseOptions, DataRequestOptions, ExecutorConfig, HttpTransport, MarketOptions, RateLimitConfig,
+    BaseOptions, DataRequestOptions, ExecutorConfig, MarketOptions, RateLimitConfig,
     RequestExecutor, RequestPlanner, TornClient, TornOptions, TornSdk, TransportError,
-    TransportRequest, TransportResponse, UserOptions,
+    TransportResponse, UserOptions,
 };
-
-#[derive(Debug)]
-struct MockTransportState {
-    responses: Mutex<VecDeque<Result<TransportResponse, TransportError>>>,
-    requests: Mutex<Vec<TransportRequest>>,
-}
-
-#[derive(Debug, Clone)]
-struct MockTransport {
-    state: Arc<MockTransportState>,
-}
-
-impl MockTransport {
-    fn with_responses(responses: Vec<Result<TransportResponse, TransportError>>) -> Self {
-        Self {
-            state: Arc::new(MockTransportState {
-                responses: Mutex::new(responses.into()),
-                requests: Mutex::new(Vec::new()),
-            }),
-        }
-    }
-}
-
-impl HttpTransport for MockTransport {
-    async fn execute(
-        &self,
-        request: &TransportRequest,
-    ) -> Result<TransportResponse, TransportError> {
-        self.state
-            .requests
-            .lock()
-            .expect("requests lock should not be poisoned")
-            .push(request.clone());
-        self.state
-            .responses
-            .lock()
-            .expect("responses lock should not be poisoned")
-            .pop_front()
-            .expect("missing mocked response")
-    }
-}
 
 fn production_capabilities_path() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
