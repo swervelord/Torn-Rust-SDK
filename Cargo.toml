@@ -1,0 +1,21 @@
+[package]
+name = "torn_sdk_planner"
+version = "1.0.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Production-focused Rust SDK for Torn API v2/v1 with planner/executor routing, retries, and typed resource wrappers."
+license = "MIT"
+repository = "https://github.com/swervelord/Torn-Rust-SDK"
+homepage = "https://github.com/swervelord/Torn-Rust-SDK"
+documentation = "https://docs.rs/torn_sdk_planner"
+readme = "README.md"
+categories = ["api-bindings", "asynchronous", "network-programming"]
+keywords = ["torn", "sdk", "api", "async", "wrapper"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+dotenvy = "0.15"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
