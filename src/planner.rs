@@ -54,9 +54,8 @@ impl RequestPlanner {
         let mut v1_generic = Vec::new();
 
         for selection_name in requested_selections {
-            if let Some(resource) = v2_resource
-                && let Some(selection) = resource.selection(&selection_name)
-            {
+            let v2_selection = v2_resource.and_then(|resource| resource.selection(&selection_name));
+            if let Some(selection) = v2_selection {
                 if (selection.unavailable_in_v2 || selection.fallback_to_v1)
                     && self
                         .v1_catalog
@@ -219,9 +218,8 @@ impl RequestPlanner {
             }
         }
 
-        if let Some(id) = &request.id
-            && allowed.contains("id")
-        {
+        let request_id = request.id.as_ref().filter(|_| allowed.contains("id"));
+        if let Some(id) = request_id {
             query.insert("id".to_string(), id.clone());
         }
 
@@ -513,9 +511,7 @@ fn choose_direct_endpoint(
         }
     }
 
-    if request.id.is_some()
-        && let Some(path) = fillable_with_id.first()
-    {
+    if let Some(path) = request.id.as_ref().and_then(|_| fillable_with_id.first()) {
         return Ok(path.clone());
     }
 

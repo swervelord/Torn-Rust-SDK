@@ -43,13 +43,13 @@ jobs:
         run: cargo doc --no-deps --all-features
 
   capabilities-drift:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - name: Capabilities drift check
-        shell: pwsh
-        run: ./scripts/check-capabilities-drift.ps1
+        shell: powershell
+        run: powershell -ExecutionPolicy Bypass -File .\scripts\check-capabilities-drift.ps1
 
   security:
     runs-on: ubuntu-latest

@@ -126,7 +126,7 @@ pub struct FactionApi<'a, T: HttpTransport> {
     pub(crate) client: &'a TornClient<T>,
 }
 
-impl<'a, T: HttpTransport> FactionApi<'a, T> {
+impl<T: HttpTransport> FactionApi<'_, T> {
     /// Supported `faction` selections validated by wrapper helpers.
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &[
         "revives",

@@ -52,7 +52,7 @@ pub struct KeyApi<'a, T: HttpTransport> {
     pub(crate) client: &'a TornClient<T>,
 }
 
-impl<'a, T: HttpTransport> KeyApi<'a, T> {
+impl<T: HttpTransport> KeyApi<'_, T> {
     /// Supported `key` selections validated by wrapper helpers.
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &["log", "info"];
 

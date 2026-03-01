@@ -82,7 +82,7 @@ pub struct ForumApi<'a, T: HttpTransport> {
     pub(crate) client: &'a TornClient<T>,
 }
 
-impl<'a, T: HttpTransport> ForumApi<'a, T> {
+impl<T: HttpTransport> ForumApi<'_, T> {
     /// Supported `forum` selections validated by wrapper helpers.
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &[
         "thread",

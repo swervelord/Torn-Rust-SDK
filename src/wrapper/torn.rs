@@ -112,7 +112,7 @@ pub struct TornApi<'a, T: HttpTransport> {
     pub(crate) client: &'a TornClient<T>,
 }
 
-impl<'a, T: HttpTransport> TornApi<'a, T> {
+impl<T: HttpTransport> TornApi<'_, T> {
     /// Supported `torn` selections validated by wrapper helpers.
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &[
         "merits",

@@ -552,9 +552,12 @@ fn parse_api_error(
 
     // Torn has historically returned some errors as 200 with a top-level `{ "error": ... }`.
     // Only treat it as an API error when the payload is purely an error envelope.
-    if is_top_level_error_envelope(json)
-        && let Some((code, message)) = extract_torn_error(json)
-    {
+    let top_level_error = if is_top_level_error_envelope(json) {
+        extract_torn_error(json)
+    } else {
+        None
+    };
+    if let Some((code, message)) = top_level_error {
         return Some(ExecutorError::Api {
             path: path.to_string(),
             status: response.status,

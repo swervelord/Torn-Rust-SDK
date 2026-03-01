@@ -68,7 +68,7 @@ pub struct MarketApi<'a, T: HttpTransport> {
     pub(crate) client: &'a TornClient<T>,
 }
 
-impl<'a, T: HttpTransport> MarketApi<'a, T> {
+impl<T: HttpTransport> MarketApi<'_, T> {
     /// Supported `market` selections validated by wrapper helpers.
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &[
         "properties",

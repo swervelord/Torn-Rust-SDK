@@ -82,7 +82,7 @@ pub struct RacingApi<'a, T: HttpTransport> {
     pub(crate) client: &'a TornClient<T>,
 }
 
-impl<'a, T: HttpTransport> RacingApi<'a, T> {
+impl<T: HttpTransport> RacingApi<'_, T> {
     /// Supported `racing` selections validated by wrapper helpers.
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &[
         "records",

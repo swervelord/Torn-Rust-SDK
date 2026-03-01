@@ -53,7 +53,7 @@ pub struct PropertyApi<'a, T: HttpTransport> {
     pub(crate) client: &'a TornClient<T>,
 }
 
-impl<'a, T: HttpTransport> PropertyApi<'a, T> {
+impl<T: HttpTransport> PropertyApi<'_, T> {
     /// Supported `property` selections validated by wrapper helpers.
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &["timestamp", "property", "lookup"];
 

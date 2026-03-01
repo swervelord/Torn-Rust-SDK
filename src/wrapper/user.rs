@@ -71,7 +71,7 @@ pub struct UserApi<'a, T: HttpTransport> {
     pub(crate) client: &'a TornClient<T>,
 }
 
-impl<'a, T: HttpTransport> UserApi<'a, T> {
+impl<T: HttpTransport> UserApi<'_, T> {
     /// Supported `user` selections validated by wrapper helpers.
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &[
         "networth",

@@ -84,12 +84,13 @@ pub(crate) fn validate_range(
     from: Option<u64>,
     to: Option<u64>,
 ) -> Result<(), SdkError> {
-    if let (Some(from), Some(to)) = (from, to)
-        && from > to
-    {
-        return Err(SdkError::Validation(format!(
-            "resource '{resource}' requires 'from' <= 'to' (received from={from}, to={to})"
-        )));
+    match (from, to) {
+        (Some(from), Some(to)) if from > to => {
+            return Err(SdkError::Validation(format!(
+                "resource '{resource}' requires 'from' <= 'to' (received from={from}, to={to})"
+            )));
+        }
+        _ => {}
     }
 
     Ok(())
