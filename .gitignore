@@ -1,3 +1,12 @@
-/target
-.env
-.env.local
+# Workspace-level ignores
+.DS_Store
+
+# SDK local artifacts
+/SDK/target/
+/SDK/.env
+/SDK/.env.local
+
+# Incubating project artifacts
+/Projects/**/target/
+/Projects/**/.env
+/Projects/**/.env.local
