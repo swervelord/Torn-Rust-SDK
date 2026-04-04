@@ -57,6 +57,8 @@ pub struct MarketItemMarket {
     #[serde(default)]
     pub cache_timestamp: Option<u64>,
     #[serde(default)]
+    pub cache_delay: Option<u64>,
+    #[serde(default)]
     pub item: Option<MarketItemSummary>,
     #[serde(default)]
     pub listings: Vec<MarketListingSummary>,
