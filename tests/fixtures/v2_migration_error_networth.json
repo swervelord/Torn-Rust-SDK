@@ -1,0 +1,6 @@
+{
+  "error": {
+    "code": 123,
+    "error": "The following selections are not available in API v2: 'networth'"
+  }
+}

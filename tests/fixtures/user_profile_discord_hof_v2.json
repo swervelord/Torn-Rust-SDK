@@ -1,0 +1,13 @@
+{
+  "profile": {
+    "player_id": 3637232,
+    "name": "Sample User",
+    "level": 100
+  },
+  "discord": {
+    "discordID": "sample#0001"
+  },
+  "hof": {
+    "rank": 42
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "source_url": "https://www.torn.com/swagger/openapi.json",
+    "current_version": "5.7.1",
+    "current_file": "spec/torn-openapi-current.json",
+    "version_file": "spec/versions/torn-openapi-5.7.1.json",
+    "sha256": "E63F29EEA3FDDE451DF0AFCA0B3E9B00502938A05340024A6055782D68B0604C",
+    "fetched_at_utc": "2026-04-28T23:15:11.402Z",
+    "user_agent": "newrustsdk-spec-sync/1.0"
+}
