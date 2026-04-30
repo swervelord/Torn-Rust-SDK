@@ -59,32 +59,24 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
         test_executor_config(),
     )?;
     let sdk = TornSdk::new(client);
-
     let profile = sdk.user().profile(&user_id).await?;
     assert!(profile.profile.id.is_some());
-
     let basic = sdk.user().basic(&user_id).await?;
     assert!(basic.profile.id.is_some());
-
     let discord = sdk.user().discord(&user_id).await?;
     assert!(discord.discord.discord_id.is_some() || !discord.discord.extra.is_empty());
-
     let money = sdk.user().money(UserOptions::default()).await?;
     assert!(money.money.wallet.is_some() || money.money.points.is_some());
-
     let bars = sdk.user().bars(UserOptions::default()).await?;
     assert!(bars.bars.energy.is_some() || bars.bars.life.is_some());
-
     let cooldowns = sdk.user().cooldowns(UserOptions::default()).await?;
     assert!(
         cooldowns.cooldowns.booster.is_some()
             || cooldowns.cooldowns.drug.is_some()
             || cooldowns.cooldowns.medical.is_some()
     );
-
     let casino = sdk.user().casino().await?;
     assert!(casino.casino.tokens.is_some() || casino.casino.streak.is_some());
-
     let inventory = sdk
         .user()
         .inventory(
@@ -104,7 +96,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
                 .and_then(|metadata| metadata.total)
                 .is_some()
     );
-
     let ongoing_trades = sdk
         .user()
         .trades(
@@ -113,7 +104,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
         )
         .await?;
     assert!(ongoing_trades._metadata.is_some());
-
     let travel = sdk.user().travel(UserOptions::default()).await?;
     assert!(travel.travel.destination.is_some() || travel.travel.time_left.is_some());
 
@@ -137,7 +127,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
             .await?;
         assert_eq!(trade.trade.id, Some(trade_id));
     }
-
     let user_faction = sdk.user().faction(&user_id).await?;
     if let Some(faction_id) = user_faction.faction.id {
         let faction = sdk
@@ -145,7 +134,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
             .basic(FactionOptions::default().with_id(faction_id.to_string()))
             .await?;
         assert!(faction.basic.name.is_some() || faction.basic.id.is_some());
-
         let faction_lookup = sdk.faction().lookup(FactionOptions::default()).await?;
         assert!(
             faction_lookup
@@ -159,7 +147,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
                 .iter()
                 .any(|selection| selection == "crimeexp")
         );
-
         let territorywars = sdk
             .faction()
             .territorywars(
@@ -167,7 +154,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
             )
             .await?;
         assert!(!territorywars.territorywars.is_empty() || territorywars._metadata.is_some());
-
         let rankedwars = sdk
             .faction()
             .rankedwars(
@@ -177,7 +163,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
             )
             .await?;
         assert!(!rankedwars.rankedwars.is_empty() || rankedwars._metadata.is_some());
-
         let raids = sdk
             .faction()
             .raids(FactionOptions::default().with_base(BaseOptions::default().with_limit(1)))
@@ -215,7 +200,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
             );
         }
     }
-
     let user_job = sdk.user().job(UserOptions::default()).await?;
     if let Some(UserEmployment::Company(company_job)) = user_job.job {
         let company_lookup = sdk.company().lookup(CompanyOptions::default()).await?;
@@ -225,30 +209,29 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
                 .iter()
                 .any(|selection| selection == "profile")
         );
-
         let company_timestamp = sdk.company().timestamp(CompanyOptions::default()).await?;
         assert!(company_timestamp.timestamp.is_some());
 
         let company_id = company_job.id.unwrap_or(92_041);
         let company_options = CompanyOptions::default().with_id(company_id.to_string());
-
         let company_profile = sdk.company().profile(company_options.clone()).await?;
         assert!(company_profile.company.id.is_some());
-
         let company_employees = sdk.company().employees(company_options.clone()).await?;
-        assert!(company_employees.company_employees.is_some());
-
+        assert!(
+            company_employees.company_employees.is_some()
+                || !company_employees.employees.is_empty()
+        );
         let company_stock = sdk.company().stock(company_options.clone()).await?;
         assert!(
             !company_stock.company_stock.is_empty()
+                || !company_stock.stock.is_empty()
                 || company_stock
                     .extra
-                    .get("company_stock")
+                    .get("stock")
                     .and_then(serde_json::Value::as_object)
                     .is_some()
         );
     }
-
     let itemmarket = sdk
         .market()
         .itemmarket(
@@ -258,7 +241,6 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
         )
         .await?;
     assert!(itemmarket.itemmarket.item.is_some() || !itemmarket.itemmarket.listings.is_empty());
-
     let key_info = sdk
         .key()
         .info(torn_sdk_planner::KeyOptions::default())
@@ -272,22 +254,18 @@ async fn live_multi_resource_smoke_typed_and_raw() -> Result<(), Box<dyn std::er
             .is_some()
             || key_info.info.selections.is_some()
     );
-
     let calendar = sdk.torn().calendar(TornOptions::default()).await?;
     assert!(!calendar.calendar.events.is_empty() || !calendar.calendar.competitions.is_empty());
-
     let raw_forum_lookup = sdk
         .forum()
         .lookup_raw(torn_sdk_planner::ForumOptions::default())
         .await?;
     assert!(!raw_forum_lookup.selections.is_empty());
-
     let raw_property_lookup = sdk
         .property()
         .lookup_raw(torn_sdk_planner::PropertyOptions::default())
         .await?;
     assert!(!raw_property_lookup.selections.is_empty());
-
     let raw_racing_lookup = sdk
         .racing()
         .lookup_raw(torn_sdk_planner::RacingOptions::default())

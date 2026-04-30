@@ -55,11 +55,7 @@ async fn company_typed_helpers_deserialize_stable_company_shapes() {
         }),
         Ok(TransportResponse {
             status: 200,
-            body: r#"{"company_detailed":{"ID":76323,"company_funds":7654321,"company_bank":7654321,"popularity":89,"efficiency":100,"environment":100,"trains_available":4,"advertising_budget":1000000,"upgrades":{"company_size":25,"staffroom_size":"Large staff room","storage_size":"Huge room","storage_space":40000},"value":123456789}}"#.to_string(),
-        }),
-        Ok(TransportResponse {
-            status: 200,
-            body: r#"{"selections":["applications","companies","detailed","employees","lookup","news","profile","stock","timestamp"]}"#.to_string(),
+            body: r#"{"selections":["applications","companies","employees","lookup","news","profile","search","stock","timestamp"]}"#.to_string(),
         }),
         Ok(TransportResponse {
             status: 200,
@@ -71,7 +67,7 @@ async fn company_typed_helpers_deserialize_stable_company_shapes() {
         }),
         Ok(TransportResponse {
             status: 200,
-            body: r#"{"company_employees":{"2077404":{"name":"RezVX","position":"Florist","days_in_company":12,"wage":0,"manual_labor":2802,"intelligence":3143,"endurance":6473,"effectiveness":{"working_stats":126,"settled_in":10,"director_education":12,"total":148},"status":{"state":"Okay","color":"green","description":"Working","details":"","until":0}}}}"#.to_string(),
+            body: r#"{"employees":[{"id":2077404,"name":"RezVX","position":{"id":1,"name":"Florist"},"days_in_company":12,"joined_at":1700000000,"wage":0,"stats":{"manual_labor":2802,"intelligence":3143,"endurance":6473},"effectiveness":{"working_stats":126,"settled_in":10,"director_education":12,"total":148},"value":12345,"status":{"state":"Okay","color":"green","description":"Working","details":"","until":0},"last_action":{"status":"Online","timestamp":1710000000,"relative":"1 minute ago"}}]}"#.to_string(),
         }),
         Ok(TransportResponse {
             status: 200,
@@ -79,7 +75,7 @@ async fn company_typed_helpers_deserialize_stable_company_shapes() {
         }),
         Ok(TransportResponse {
             status: 200,
-            body: r#"{"company_stock":{"Erotic DVD":{"cost":1400,"price":2200,"in_stock":120,"on_order":12,"sold_amount":43},"Lube":{"cost":400,"price":650,"in_stock":55,"on_order":5,"sold_amount":19}}}"#.to_string(),
+            body: r#"{"stock":[{"id":1,"name":"Erotic DVD","cost":1400,"rrp":2000,"price":2200,"in_stock":120,"on_order":12,"sold_amount":43,"sold_worth":94600},{"id":2,"name":"Lube","cost":400,"rrp":600,"price":650,"in_stock":55,"on_order":5,"sold_amount":19,"sold_worth":12350}]}"#.to_string(),
         }),
     ]);
 
@@ -105,25 +101,6 @@ async fn company_typed_helpers_deserialize_stable_company_shapes() {
         .expect("company companies should deserialize");
     assert!(companies.company.is_none());
     assert_eq!(companies.company_delay, Some(60));
-
-    let detailed = sdk
-        .company()
-        .detailed(CompanyOptions::default().with_id("76323"))
-        .await
-        .expect("company detailed should deserialize");
-    let detailed_company = detailed
-        .company_detailed
-        .as_ref()
-        .expect("company detailed payload should exist");
-    assert_eq!(detailed_company.id, Some(76_323));
-    assert_eq!(detailed_company.trains_available, Some(4));
-    assert_eq!(
-        detailed_company
-            .upgrades
-            .as_ref()
-            .and_then(|upgrades| upgrades.company_size),
-        Some(25)
-    );
 
     let lookup = sdk
         .company()
@@ -177,12 +154,15 @@ async fn company_typed_helpers_deserialize_stable_company_shapes() {
         .await
         .expect("company employees should deserialize");
     let employee = employees
-        .company_employees
-        .as_ref()
-        .and_then(|entries| entries.get("2077404"))
+        .employees
+        .iter()
+        .find(|employee| employee.id == Some(2_077_404))
         .expect("employee should exist");
     assert_eq!(employee.position.as_deref(), Some("Florist"));
-    assert_eq!(employee.manual_labor, Some(2_802));
+    assert_eq!(
+        employee.stats.as_ref().and_then(|stats| stats.manual_labor),
+        Some(2_802)
+    );
     assert_eq!(
         employee
             .effectiveness
@@ -209,8 +189,9 @@ async fn company_typed_helpers_deserialize_stable_company_shapes() {
         .await
         .expect("company stock should deserialize");
     let dvd = stock
-        .company_stock
-        .get("Erotic DVD")
+        .stock
+        .iter()
+        .find(|item| item.name.as_deref() == Some("Erotic DVD"))
         .expect("stock item should exist");
     assert_eq!(dvd.cost, Some(1_400));
     assert_eq!(dvd.price, Some(2_200));
@@ -257,27 +238,18 @@ async fn company_wrapper_supports_owner_and_id_scoped_routes() {
     let requests = transport.requests();
     assert_eq!(requests.len(), 3);
 
-    assert_eq!(requests[0].path, "/company");
-    assert_eq!(
-        requests[0].query.get("selections"),
-        Some(&"lookup".to_string())
-    );
+    assert_eq!(requests[0].path, "/company/lookup");
+    assert!(!requests[0].query.contains_key("selections"));
     assert!(!requests[0].query.contains_key("id"));
 
-    assert_eq!(requests[1].path, "/company/76323");
-    assert_eq!(
-        requests[1].query.get("selections"),
-        Some(&"profile".to_string())
-    );
+    assert_eq!(requests[1].path, "/company/76323/profile");
+    assert!(!requests[1].query.contains_key("selections"));
     assert!(!requests[1].query.contains_key("id"));
 
-    assert_eq!(requests[2].path, "/company");
-    assert_eq!(
-        requests[2].query.get("selections"),
-        Some(&"employees".to_string())
-    );
-    assert_eq!(requests[2].query.get("from"), Some(&"10".to_string()));
-    assert_eq!(requests[2].query.get("to"), Some(&"20".to_string()));
+    assert_eq!(requests[2].path, "/company/employees");
+    assert!(!requests[2].query.contains_key("selections"));
+    assert!(!requests[2].query.contains_key("from"));
+    assert!(!requests[2].query.contains_key("to"));
 }
 
 #[tokio::test]

@@ -1,7 +1,7 @@
 {
     "spec": {
         "title": "Torn API",
-        "version": "5.7.1",
+        "version": "5.8.0",
         "openapi": "3.1.0",
         "source_file": "spec/torn-openapi-current.json"
     },
@@ -11,6 +11,791 @@
         "generic_filter_parameters lists filters accepted by generic endpoints, but filter relevance can still vary by selection."
     ],
     "resources": {
+        "company": {
+            "generic_path": "/company",
+            "lookup_path": "/company/lookup",
+            "timestamp_path": "/company/timestamp",
+            "selection_schema": "CompanySelectionName",
+            "selection_schema_ref": "#/components/schemas/CompanySelectionName",
+            "selections_accept_unknown_strings": true,
+            "selection_count": 9,
+            "generic_supports_legacy": true,
+            "generic_parameters": [
+                {
+                    "name": "selections",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "id",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "legacy",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "limit",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "striptags",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "offset",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "timestamp",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "comment",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "key",
+                    "in": "query",
+                    "required": false
+                }
+            ],
+            "generic_filter_parameters": [
+                {
+                    "name": "limit",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "striptags",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "offset",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "timestamp",
+                    "in": "query",
+                    "required": false
+                },
+                {
+                    "name": "comment",
+                    "in": "query",
+                    "required": false
+                }
+            ],
+            "selections": [
+                {
+                    "name": "applications",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": false,
+                    "unavailable_in_v2": false,
+                    "endpoints": [
+                        "/company/applications"
+                    ],
+                    "query_parameters": [
+                        "timestamp",
+                        "comment",
+                        "key"
+                    ],
+                    "required_path_parameters": [],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyApplicationsResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "applications"
+                    ],
+                    "response_field_paths": [
+                        "applications",
+                        "applications[]",
+                        "applications[].player",
+                        "applications[].message",
+                        "applications[].expires_at",
+                        "applications[].status"
+                    ],
+                    "notes": [],
+                    "can_use_generic_endpoint": false,
+                    "requires_direct_endpoint_only": true
+                },
+                {
+                    "name": "companies",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": true,
+                    "unavailable_in_v2": true,
+                    "endpoints": [],
+                    "query_parameters": [],
+                    "required_path_parameters": [],
+                    "response_schema_refs": [],
+                    "response_top_level_fields": [],
+                    "response_field_paths": [],
+                    "notes": [],
+                    "can_use_generic_endpoint": true,
+                    "requires_direct_endpoint_only": false
+                },
+                {
+                    "name": "employees",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": false,
+                    "unavailable_in_v2": false,
+                    "endpoints": [
+                        "/company/employees",
+                        "/company/{id}/employees"
+                    ],
+                    "query_parameters": [
+                        "striptags",
+                        "timestamp",
+                        "comment",
+                        "key"
+                    ],
+                    "required_path_parameters": [
+                        "id"
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyEmployeesResponse",
+                        "#/components/schemas/CompanyEmployeesResponseBasic"
+                    ],
+                    "response_top_level_fields": [
+                        "employees"
+                    ],
+                    "response_field_paths": [
+                        "employees",
+                        "employees[]",
+                        "employees[].id",
+                        "employees[].name",
+                        "employees[].position",
+                        "employees[].days_in_company",
+                        "employees[].status",
+                        "employees[].last_action",
+                        "employees[].joined_at",
+                        "employees[].wage",
+                        "employees[].stats",
+                        "employees[].effectiveness",
+                        "employees[].value"
+                    ],
+                    "notes": [],
+                    "can_use_generic_endpoint": false,
+                    "requires_direct_endpoint_only": true
+                },
+                {
+                    "name": "lookup",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": false,
+                    "unavailable_in_v2": false,
+                    "endpoints": [
+                        "/company/lookup"
+                    ],
+                    "query_parameters": [
+                        "timestamp",
+                        "comment",
+                        "key"
+                    ],
+                    "required_path_parameters": [],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyLookupResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "selections"
+                    ],
+                    "response_field_paths": [
+                        "selections",
+                        "selections[]"
+                    ],
+                    "notes": [],
+                    "can_use_generic_endpoint": false,
+                    "requires_direct_endpoint_only": true
+                },
+                {
+                    "name": "news",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": true,
+                    "unavailable_in_v2": true,
+                    "endpoints": [],
+                    "query_parameters": [],
+                    "required_path_parameters": [],
+                    "response_schema_refs": [],
+                    "response_top_level_fields": [],
+                    "response_field_paths": [],
+                    "notes": [],
+                    "can_use_generic_endpoint": true,
+                    "requires_direct_endpoint_only": false
+                },
+                {
+                    "name": "profile",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": false,
+                    "unavailable_in_v2": false,
+                    "endpoints": [
+                        "/company/profile",
+                        "/company/{id}/profile"
+                    ],
+                    "query_parameters": [
+                        "striptags",
+                        "timestamp",
+                        "comment",
+                        "key"
+                    ],
+                    "required_path_parameters": [
+                        "id"
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyProfileResponseMixed",
+                        "#/components/schemas/CompanyProfileResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "profile"
+                    ],
+                    "response_field_paths": [
+                        "profile",
+                        "profile.id",
+                        "profile.name",
+                        "profile.created_at",
+                        "profile.days_old",
+                        "profile.type",
+                        "profile.rating",
+                        "profile.director",
+                        "profile.employees",
+                        "profile.income",
+                        "profile.customers",
+                        "profile.funds",
+                        "profile.popularity",
+                        "profile.efficiency",
+                        "profile.environment",
+                        "profile.trains",
+                        "profile.applications_allowed",
+                        "profile.advertisement_budget",
+                        "profile.upgrades",
+                        "profile.value"
+                    ],
+                    "notes": [],
+                    "can_use_generic_endpoint": false,
+                    "requires_direct_endpoint_only": true
+                },
+                {
+                    "name": "search",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": true,
+                    "unavailable_in_v2": true,
+                    "endpoints": [],
+                    "query_parameters": [],
+                    "required_path_parameters": [],
+                    "response_schema_refs": [],
+                    "response_top_level_fields": [],
+                    "response_field_paths": [],
+                    "notes": [],
+                    "can_use_generic_endpoint": true,
+                    "requires_direct_endpoint_only": false
+                },
+                {
+                    "name": "stock",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": false,
+                    "unavailable_in_v2": false,
+                    "endpoints": [
+                        "/company/stock"
+                    ],
+                    "query_parameters": [
+                        "timestamp",
+                        "comment",
+                        "key"
+                    ],
+                    "required_path_parameters": [],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyStockResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "stock"
+                    ],
+                    "response_field_paths": [
+                        "stock",
+                        "stock[]",
+                        "stock[].name",
+                        "stock[].id",
+                        "stock[].cost",
+                        "stock[].rrp",
+                        "stock[].price",
+                        "stock[].in_stock",
+                        "stock[].on_order",
+                        "stock[].sold_amount",
+                        "stock[].sold_worth"
+                    ],
+                    "notes": [],
+                    "can_use_generic_endpoint": false,
+                    "requires_direct_endpoint_only": true
+                },
+                {
+                    "name": "timestamp",
+                    "in_selection_enum": true,
+                    "standalone_only": false,
+                    "fallback_to_v1": false,
+                    "unavailable_in_v2": false,
+                    "endpoints": [
+                        "/company/timestamp"
+                    ],
+                    "query_parameters": [
+                        "timestamp",
+                        "comment",
+                        "key"
+                    ],
+                    "required_path_parameters": [],
+                    "response_schema_refs": [
+                        "#/components/schemas/TimestampResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "timestamp"
+                    ],
+                    "response_field_paths": [
+                        "timestamp"
+                    ],
+                    "notes": [],
+                    "can_use_generic_endpoint": false,
+                    "requires_direct_endpoint_only": true
+                }
+            ],
+            "endpoints": [
+                {
+                    "path": "/company/applications",
+                    "method": "get",
+                    "operation_id": null,
+                    "summary": null,
+                    "description": null,
+                    "stability": "Stable",
+                    "selection_hint": "applications",
+                    "standalone_only": false,
+                    "parameters": [
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "comment",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "key",
+                            "in": "query",
+                            "required": false
+                        }
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyApplicationsResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "applications"
+                    ],
+                    "response_required_fields": [
+                        "applications"
+                    ],
+                    "response_field_paths": [
+                        "applications",
+                        "applications[]",
+                        "applications[].player",
+                        "applications[].message",
+                        "applications[].expires_at",
+                        "applications[].status"
+                    ]
+                },
+                {
+                    "path": "/company/employees",
+                    "method": "get",
+                    "operation_id": null,
+                    "summary": null,
+                    "description": null,
+                    "stability": "Stable",
+                    "selection_hint": "employees",
+                    "standalone_only": false,
+                    "parameters": [
+                        {
+                            "name": "striptags",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "comment",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "key",
+                            "in": "query",
+                            "required": false
+                        }
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyEmployeesResponse",
+                        "#/components/schemas/CompanyEmployeesResponseBasic"
+                    ],
+                    "response_top_level_fields": [
+                        "employees"
+                    ],
+                    "response_required_fields": [
+                        "employees"
+                    ],
+                    "response_field_paths": [
+                        "employees",
+                        "employees[]",
+                        "employees[].id",
+                        "employees[].name",
+                        "employees[].position",
+                        "employees[].days_in_company",
+                        "employees[].status",
+                        "employees[].last_action",
+                        "employees[].joined_at",
+                        "employees[].wage",
+                        "employees[].stats",
+                        "employees[].effectiveness",
+                        "employees[].value"
+                    ]
+                },
+                {
+                    "path": "/company/{id}/employees",
+                    "method": "get",
+                    "operation_id": null,
+                    "summary": null,
+                    "description": null,
+                    "stability": "Stable",
+                    "selection_hint": "employees",
+                    "standalone_only": false,
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "in": "path",
+                            "required": true
+                        },
+                        {
+                            "name": "striptags",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "comment",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "key",
+                            "in": "query",
+                            "required": false
+                        }
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyEmployeesResponse",
+                        "#/components/schemas/CompanyEmployeesResponseBasic"
+                    ],
+                    "response_top_level_fields": [
+                        "employees"
+                    ],
+                    "response_required_fields": [
+                        "employees"
+                    ],
+                    "response_field_paths": [
+                        "employees",
+                        "employees[]",
+                        "employees[].id",
+                        "employees[].name",
+                        "employees[].position",
+                        "employees[].days_in_company",
+                        "employees[].status",
+                        "employees[].last_action",
+                        "employees[].joined_at",
+                        "employees[].wage",
+                        "employees[].stats",
+                        "employees[].effectiveness",
+                        "employees[].value"
+                    ]
+                },
+                {
+                    "path": "/company/lookup",
+                    "method": "get",
+                    "operation_id": null,
+                    "summary": null,
+                    "description": null,
+                    "stability": "Stable",
+                    "selection_hint": "lookup",
+                    "standalone_only": false,
+                    "parameters": [
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "comment",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "key",
+                            "in": "query",
+                            "required": false
+                        }
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyLookupResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "selections"
+                    ],
+                    "response_required_fields": [
+                        "selections"
+                    ],
+                    "response_field_paths": [
+                        "selections",
+                        "selections[]"
+                    ]
+                },
+                {
+                    "path": "/company/profile",
+                    "method": "get",
+                    "operation_id": null,
+                    "summary": null,
+                    "description": null,
+                    "stability": "Stable",
+                    "selection_hint": "profile",
+                    "standalone_only": false,
+                    "parameters": [
+                        {
+                            "name": "striptags",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "comment",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "key",
+                            "in": "query",
+                            "required": false
+                        }
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyProfileResponseMixed",
+                        "#/components/schemas/CompanyProfileResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "profile"
+                    ],
+                    "response_required_fields": [
+                        "profile"
+                    ],
+                    "response_field_paths": [
+                        "profile",
+                        "profile.id",
+                        "profile.name",
+                        "profile.created_at",
+                        "profile.days_old",
+                        "profile.type",
+                        "profile.rating",
+                        "profile.director",
+                        "profile.employees",
+                        "profile.income",
+                        "profile.customers",
+                        "profile.funds",
+                        "profile.popularity",
+                        "profile.efficiency",
+                        "profile.environment",
+                        "profile.trains",
+                        "profile.applications_allowed",
+                        "profile.advertisement_budget",
+                        "profile.upgrades",
+                        "profile.value"
+                    ]
+                },
+                {
+                    "path": "/company/{id}/profile",
+                    "method": "get",
+                    "operation_id": null,
+                    "summary": null,
+                    "description": null,
+                    "stability": "Stable",
+                    "selection_hint": "profile",
+                    "standalone_only": false,
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "in": "path",
+                            "required": true
+                        },
+                        {
+                            "name": "striptags",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "comment",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "key",
+                            "in": "query",
+                            "required": false
+                        }
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyProfileResponseMixed",
+                        "#/components/schemas/CompanyProfileResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "profile"
+                    ],
+                    "response_required_fields": [
+                        "profile"
+                    ],
+                    "response_field_paths": [
+                        "profile",
+                        "profile.id",
+                        "profile.name",
+                        "profile.created_at",
+                        "profile.days_old",
+                        "profile.type",
+                        "profile.rating",
+                        "profile.director",
+                        "profile.employees",
+                        "profile.income",
+                        "profile.customers",
+                        "profile.funds",
+                        "profile.popularity",
+                        "profile.efficiency",
+                        "profile.environment",
+                        "profile.trains",
+                        "profile.applications_allowed",
+                        "profile.advertisement_budget",
+                        "profile.upgrades",
+                        "profile.value"
+                    ]
+                },
+                {
+                    "path": "/company/stock",
+                    "method": "get",
+                    "operation_id": null,
+                    "summary": null,
+                    "description": null,
+                    "stability": "Stable",
+                    "selection_hint": "stock",
+                    "standalone_only": false,
+                    "parameters": [
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "comment",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "key",
+                            "in": "query",
+                            "required": false
+                        }
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/CompanyStockResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "stock"
+                    ],
+                    "response_required_fields": [
+                        "stock"
+                    ],
+                    "response_field_paths": [
+                        "stock",
+                        "stock[]",
+                        "stock[].name",
+                        "stock[].id",
+                        "stock[].cost",
+                        "stock[].rrp",
+                        "stock[].price",
+                        "stock[].in_stock",
+                        "stock[].on_order",
+                        "stock[].sold_amount",
+                        "stock[].sold_worth"
+                    ]
+                },
+                {
+                    "path": "/company/timestamp",
+                    "method": "get",
+                    "operation_id": null,
+                    "summary": null,
+                    "description": null,
+                    "stability": "Stable",
+                    "selection_hint": "timestamp",
+                    "standalone_only": false,
+                    "parameters": [
+                        {
+                            "name": "timestamp",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "comment",
+                            "in": "query",
+                            "required": false
+                        },
+                        {
+                            "name": "key",
+                            "in": "query",
+                            "required": false
+                        }
+                    ],
+                    "response_schema_refs": [
+                        "#/components/schemas/TimestampResponse"
+                    ],
+                    "response_top_level_fields": [
+                        "timestamp"
+                    ],
+                    "response_required_fields": [
+                        "timestamp"
+                    ],
+                    "response_field_paths": [
+                        "timestamp"
+                    ]
+                }
+            ]
+        },
         "faction": {
             "generic_path": "/faction",
             "lookup_path": "/faction/lookup",

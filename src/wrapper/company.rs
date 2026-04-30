@@ -5,7 +5,7 @@ use crate::models::generated::RawSelectionBundle;
 use crate::models::manual::company::{
     CompanyApplicationsBundle, CompanyCompaniesBundle, CompanyDetailedBundle,
     CompanyEmployeesBundle, CompanyLookupBundle, CompanyNewsBundle, CompanyProfileBundle,
-    CompanyStockBundle, CompanyTimestampBundle,
+    CompanySearchBundle, CompanyStockBundle, CompanyTimestampBundle,
 };
 use crate::transport::HttpTransport;
 use crate::wrapper::error::SdkError;
@@ -61,11 +61,11 @@ impl<T: HttpTransport> CompanyApi<'_, T> {
     pub const SUPPORTED_SELECTIONS: &'static [&'static str] = &[
         "applications",
         "companies",
-        "detailed",
         "employees",
         "lookup",
         "news",
         "profile",
+        "search",
         "stock",
         "timestamp",
     ];
@@ -117,21 +117,6 @@ impl<T: HttpTransport> CompanyApi<'_, T> {
         .await
     }
 
-    /// Typed helper for `company.detailed`.
-    pub async fn detailed(
-        &self,
-        options: CompanyOptions,
-    ) -> Result<CompanyDetailedBundle, SdkError> {
-        validate_options_for_selection(&options)?;
-        execute_typed(
-            self.client,
-            "company",
-            vec!["detailed".to_string()],
-            options.into_data_request_options(),
-        )
-        .await
-    }
-
     /// Typed helper for `company.timestamp`.
     pub async fn timestamp(
         &self,
@@ -159,6 +144,17 @@ impl<T: HttpTransport> CompanyApi<'_, T> {
         .await
     }
 
+    /// Compatibility helper for the removed `company.detailed` selection.
+    ///
+    /// Torn API v2 5.8.0 folded details into `company.profile`, so this method now requests
+    /// `profile` and returns the profile bundle.
+    pub async fn detailed(
+        &self,
+        options: CompanyOptions,
+    ) -> Result<CompanyDetailedBundle, SdkError> {
+        self.profile(options).await
+    }
+
     /// Typed helper for `company.employees`.
     pub async fn employees(
         &self,
@@ -181,6 +177,18 @@ impl<T: HttpTransport> CompanyApi<'_, T> {
             self.client,
             "company",
             vec!["news".to_string()],
+            options.into_data_request_options(),
+        )
+        .await
+    }
+
+    /// Typed helper for `company.search`.
+    pub async fn search(&self, options: CompanyOptions) -> Result<CompanySearchBundle, SdkError> {
+        validate_options_for_selection(&options)?;
+        execute_typed(
+            self.client,
+            "company",
+            vec!["search".to_string()],
             options.into_data_request_options(),
         )
         .await
@@ -260,11 +268,11 @@ impl<T: HttpTransport> CompanyApi<'_, T> {
     raw_selection_methods!(CompanyOptions;
         applications_raw => "applications",
         companies_raw => "companies",
-        detailed_raw => "detailed",
         employees_raw => "employees",
         lookup_raw => "lookup",
         news_raw => "news",
         profile_raw => "profile",
+        search_raw => "search",
         stock_raw => "stock",
         timestamp_raw => "timestamp",
     );

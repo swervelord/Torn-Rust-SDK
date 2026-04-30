@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## Unreleased
+
+### Changed
+
+- Synced Torn OpenAPI schema to `5.8.0`.
+- Updated `company` routing for the API v2 refactor: `profile`, `employees`, `applications`, `stock`, `lookup`, and `timestamp` now use v2 endpoints, while `companies`, `news`, and `search` remain v1 fallbacks.
+- Expanded company typed models for v2 response envelopes and preserved compatibility with legacy v1-shaped company payloads.
+
 ## [1.0.0] - 2026-03-01
 
 ### Added

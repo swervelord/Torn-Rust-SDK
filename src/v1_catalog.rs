@@ -197,17 +197,7 @@ const FACTION_SELECTIONS: &[&str] = &[
     "weapons",
 ];
 
-const COMPANY_SELECTIONS: &[&str] = &[
-    "applications",
-    "companies",
-    "detailed",
-    "employees",
-    "lookup",
-    "news",
-    "profile",
-    "stock",
-    "timestamp",
-];
+const COMPANY_SELECTIONS: &[&str] = &["companies", "news", "search"];
 
 const MARKET_SELECTIONS: &[&str] = &[
     "auctionhouse",
@@ -318,7 +308,8 @@ mod tests {
     fn supports_company_v1_only_resource() {
         let catalog = V1Catalog;
         assert!(catalog.resource("company").is_some());
-        assert!(catalog.has_selection("company", "profile"));
+        assert!(catalog.has_selection("company", "news"));
+        assert!(!catalog.has_selection("company", "profile"));
         assert_eq!(
             catalog.build_generic_path("company", Some("123")),
             Some("/company/123".to_string())

@@ -885,7 +885,7 @@ mod tests {
     #[test]
     fn supports_v1_only_company_resource() {
         let planner = planner_from_fixture();
-        let request = PlanRequest::new("company", vec!["profile", "employees"]).with_id("55");
+        let request = PlanRequest::new("company", vec!["companies", "news"]).with_id("55");
         let plan = planner.plan(&request).expect("planning should work");
 
         assert_eq!(plan.requests.len(), 1);
@@ -893,14 +893,14 @@ mod tests {
         assert_eq!(plan.requests[0].path, "/company/55");
         assert_eq!(
             plan.requests[0].query.get("selections"),
-            Some(&"profile,employees".to_string())
+            Some(&"companies,news".to_string())
         );
     }
 
     #[test]
     fn scrubs_unknown_filters_from_v1_requests() {
         let planner = planner_from_fixture();
-        let request = PlanRequest::new("company", vec!["profile"])
+        let request = PlanRequest::new("company", vec!["news"])
             .with_id("55")
             .with_filter("limit", "25")
             .with_filter("timestamp", "1")

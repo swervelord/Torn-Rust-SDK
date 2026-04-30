@@ -9,11 +9,11 @@ use support::MockTransport;
 use torn_sdk_planner::models::manual::key::KeyLogTargetId;
 use torn_sdk_planner::models::manual::user::{TradeItem, UserEmployment, UserTradeTimestamp};
 use torn_sdk_planner::{
-    BaseOptions, CapabilitiesDocument, DataRequestOptions, ExecutionOptions, ExecutorConfig,
-    FactionApi, FactionOptions, ForumApi, ForumOptions, KeyApi, KeyOptions, MarketApi,
-    MarketOptions, PropertyApi, PropertyOptions, RacingApi, RacingOptions, RateLimitConfig,
-    RequestExecutor, RequestPlanner, SdkError, TornApi, TornClient, TornOptions, TornSdk,
-    TransportError, TransportResponse, UserApi, UserOptions,
+    BaseOptions, CapabilitiesDocument, CompanyApi, DataRequestOptions, ExecutionOptions,
+    ExecutorConfig, FactionApi, FactionOptions, ForumApi, ForumOptions, KeyApi, KeyOptions,
+    MarketApi, MarketOptions, PropertyApi, PropertyOptions, RacingApi, RacingOptions,
+    RateLimitConfig, RequestExecutor, RequestPlanner, SdkError, TornApi, TornClient, TornOptions,
+    TornSdk, TransportError, TransportResponse, UserApi, UserOptions,
 };
 
 fn fixture_capabilities() -> CapabilitiesDocument {
@@ -1072,6 +1072,7 @@ fn wrapper_selection_matrix_matches_capabilities() {
     let expected_resources = BTreeSet::from([
         "faction".to_string(),
         "forum".to_string(),
+        "company".to_string(),
         "key".to_string(),
         "market".to_string(),
         "property".to_string(),
@@ -1085,6 +1086,11 @@ fn wrapper_selection_matrix_matches_capabilities() {
         "user",
         &capabilities,
         UserApi::<MockTransport>::SUPPORTED_SELECTIONS,
+    );
+    assert_resource_selection_matrix(
+        "company",
+        &capabilities,
+        CompanyApi::<MockTransport>::SUPPORTED_SELECTIONS,
     );
     assert_resource_selection_matrix(
         "faction",
